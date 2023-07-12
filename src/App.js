@@ -9,11 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { GenerateToken } from './components/APIs/Auth/auth';
 export default function App() {
 
-
-
-
-
-
   useEffect(() => {
     GenerateToken();
     // if (isAuthenticated) {
@@ -29,8 +24,8 @@ export default function App() {
 
     <Routes>
       {/* <Route path="/register" component={RegisterForm} /> */}
-      <Route exact path='/register' element={<RegisterForm />} />
-      <Route exact path='/login' element={<LoginForm />} />
+      <Route exact path='/' element={<RegisterForm />} /> 
+      <Route exact path='/login' element={<LoginForm />} />    
       <Route exact path='/profile' element={<Profile />} />
       {/* <Route path="/login" component={LoginForm} />
         <Route path="/logout" component={Logout} /> */}

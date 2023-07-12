@@ -31,6 +31,10 @@ export default function RegisterForm() {
       });
   };
 
+  const loginUser = () =>{
+    navigate('/login');
+  }
+
   function ErrorShowing(errorMessage) {
     return (
       <p class="text-[#ff0000]">
@@ -158,6 +162,9 @@ export default function RegisterForm() {
           </button>
         </div>
       </form>
+      <p className="mt-10 text-center text-sm text-gray-500">
+            <button onClick={loginUser}>Already have an account? Login Now</button>
+         </p>
       <ToastContainer />
     </div>
   )

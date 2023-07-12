@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form";
-import { useState,useRef } from "react";
+import { useState, useRef } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useGoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import { useNavigate } from 'react-router-dom';
 import { userLoginValidations } from "./validation";
 import { HandleLogin, HandleLoginByGoogle, HandleRegister } from "../APIs/Auth/auth";
 import { ToastContainer } from "react-toastify";
+import TwitterLogin from "react-twitter-login";
+import { Switch } from '@headlessui/react'
+import { LoginSocialFacebook } from 'reactjs-social-login';
+import { FacebookLoginButton } from 'react-social-login-buttons';
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +21,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(userLoginValidations) });
 
-  const onSubmit = async(event) => {
+  const onSubmit = async (event) => {
     setLoading(true);
     await HandleLogin(event)
       .then((res) => {
@@ -44,12 +48,12 @@ export default function LoginForm() {
       </p>
     );
   }
-  
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       await HandleLoginByGoogle(tokenResponse)
         .then(async (res) => {
-          console.log('dataa',res)
+          console.log('dataa', res)
           const reqData = {
             first_name: res.data.given_name,
             last_name: res.data.family_name,
@@ -80,10 +84,15 @@ export default function LoginForm() {
     onError: (errorResponse) => console.log(errorResponse),
   });
 
-  const twitterLogin = () =>{
+  const twitterLogin = () => {
     console.log("Twitter Login")
   }
-
+  const registration = () => {
+    navigate("/");
+  }
+  const authHandler = (err, data) => {
+    console.log(err, data);
+  };
 
   return (
     <>
@@ -114,9 +123,9 @@ export default function LoginForm() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                  {errors && errors.email
-                ? ErrorShowing(errors?.email?.message)
-                : ""}
+                {errors && errors.email
+                  ? ErrorShowing(errors?.email?.message)
+                  : ""}
               </div>
             </div>
 
@@ -125,11 +134,7 @@ export default function LoginForm() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Password
                 </label>
-                {/* <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div> */}
+
               </div>
               <div className="mt-2">
                 <input
@@ -140,9 +145,9 @@ export default function LoginForm() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
-                    {errors && errors.password
-                ? ErrorShowing(errors?.password?.message)
-                : ""}
+                {errors && errors.password
+                  ? ErrorShowing(errors?.password?.message)
+                  : ""}
               </div>
             </div>
 
@@ -160,13 +165,47 @@ export default function LoginForm() {
           <p className="mt-10 text-center text-sm text-gray-500">
             <button onClick={() => googleLogin()}>Continue with google</button>
           </p>
-
+          <div className="mt-10 ml-20 ">
+            <TwitterLogin
+              authCallback={authHandler}
+              consumerKey={'df2jzuvooRdjoh0MqEZNr9yXc'}
+              consumerSecret={'XgvsJ2QQNMNid8bMv5dsq54ebESNzyxlwepmEmR0aArlPMJfIn'}
+              requestTokenUrl={'http://localhost:4000/api/v1/auth/twitter/reverse'}
+            />
+          </div>
           <p className="mt-10 text-center text-sm text-gray-500">
-            <button onClick={() => twitterLogin()}>Continue with twitter</button>
-          </p>
-
-
+            <button onClick={registration}>Don't have an account? Create Now</button>
+         </p>
+         {/* <div className="mt-10 ml-20 ">
+          <Switch.Group>
+            <Switch.Label className="text-sm leading-6 text-gray-600">
+            Don't have an account?{' '}
+              <a href="#" className="font-semibold text-indigo-600">
+                Create Now
+              </a>
+              .
+            </Switch.Label>
+          </Switch.Group>
+          </div> */}
         </div>
+        {/* <TwitterLogin
+          authCallback={authHandler}
+          consumerKey={`L9jQFPh4zoPA6N1hO68aTnJoT`}
+          consumerSecret={`ha4VMiKDCNhJze0sPu50UNYwjOfaDQtxxv420x33LeS5bdX94L`}
+          requestTokenUrl="http://localhost:3000/api/v1/auth/twitter/reverse"
+        /> */}
+
+        {/* <LoginSocialFacebook
+        appId="1644334002737302"
+        onResolve={(response)=>{
+            console.log('Facebook User', response)
+        }}  
+        onReject={(error)=>{
+          console.log("Errors",error)
+        }}
+        >
+          <FacebookLoginButton />
+        </LoginSocialFacebook> */}
         <ToastContainer />
       </div>
 
