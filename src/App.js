@@ -1,7 +1,6 @@
 import './App.css';
-import React, { Component, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Route, Redirect, Routes, Router, } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, } from "react-router-dom";
 import RegisterForm from './components/Register';
 import LoginForm from './components/Login';
 import Profile from './components/Profile';
@@ -11,13 +10,7 @@ export default function App() {
 
   useEffect(() => {
     GenerateToken();
-    // if (isAuthenticated) {
-    //   console.log("isAuthenticatedisAuthenticated", isAuthenticated)
-    //   window.location = ("/profile")
-    // }else{
-    //   console.log("elseeeee")
-    //   // window.location = ("/profile")
-    // }
+
   }, [])
 
   return (

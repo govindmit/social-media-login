@@ -7,9 +7,7 @@ import { userLoginValidations } from "./validation";
 import { HandleLogin, HandleLoginByGoogle, HandleRegister } from "../APIs/Auth/auth";
 import { ToastContainer } from "react-toastify";
 import TwitterLogin from "react-twitter-login";
-import { Switch } from '@headlessui/react'
-import { LoginSocialFacebook } from 'reactjs-social-login';
-import { FacebookLoginButton } from 'react-social-login-buttons';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -53,7 +51,7 @@ export default function LoginForm() {
     onSuccess: async (tokenResponse) => {
       await HandleLoginByGoogle(tokenResponse)
         .then(async (res) => {
-          console.log('dataa', res)
+          console.log('userData', res)
           const reqData = {
             first_name: res.data.given_name,
             last_name: res.data.family_name,
@@ -84,9 +82,6 @@ export default function LoginForm() {
     onError: (errorResponse) => console.log(errorResponse),
   });
 
-  const twitterLogin = () => {
-    console.log("Twitter Login")
-  }
   const registration = () => {
     navigate("/");
   }
@@ -162,50 +157,27 @@ export default function LoginForm() {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            <button onClick={() => googleLogin()}>Continue with google</button>
-          </p>
+          <div className="mt-10 text-center text-sm text-gray-500">
+            <button className="rounded-full py-2 px-4 border-solid border-4 border-light-blue-500" onClick={() => googleLogin()}>
+              <img
+                className="m-2 inline-block h-4 w-4  rounded-full ring-2 ring-white "
+                src="/images/google.svg"
+              />Continue with google
+            </button>
+          </div>
+
           <div className="mt-10 ml-20 ">
             <TwitterLogin
               authCallback={authHandler}
-              consumerKey={'df2jzuvooRdjoh0MqEZNr9yXc'}
-              consumerSecret={'XgvsJ2QQNMNid8bMv5dsq54ebESNzyxlwepmEmR0aArlPMJfIn'}
+              consumerKey={'piXS6irnP0nDjIPwrXgTxET5Y'}
+              consumerSecret={'URDpYUsWG5Lnrrv8RdrKiw0y92DV1mH7wmCMDKhRGzJHPjuXcl'}
               requestTokenUrl={'http://localhost:4000/api/v1/auth/twitter/reverse'}
             />
           </div>
           <p className="mt-10 text-center text-sm text-gray-500">
             <button onClick={registration}>Don't have an account? Create Now</button>
-         </p>
-         {/* <div className="mt-10 ml-20 ">
-          <Switch.Group>
-            <Switch.Label className="text-sm leading-6 text-gray-600">
-            Don't have an account?{' '}
-              <a href="#" className="font-semibold text-indigo-600">
-                Create Now
-              </a>
-              .
-            </Switch.Label>
-          </Switch.Group>
-          </div> */}
+          </p>
         </div>
-        {/* <TwitterLogin
-          authCallback={authHandler}
-          consumerKey={`L9jQFPh4zoPA6N1hO68aTnJoT`}
-          consumerSecret={`ha4VMiKDCNhJze0sPu50UNYwjOfaDQtxxv420x33LeS5bdX94L`}
-          requestTokenUrl="http://localhost:3000/api/v1/auth/twitter/reverse"
-        /> */}
-
-        {/* <LoginSocialFacebook
-        appId="1644334002737302"
-        onResolve={(response)=>{
-            console.log('Facebook User', response)
-        }}  
-        onReject={(error)=>{
-          console.log("Errors",error)
-        }}
-        >
-          <FacebookLoginButton />
-        </LoginSocialFacebook> */}
         <ToastContainer />
       </div>
 

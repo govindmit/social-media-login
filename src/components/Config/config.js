@@ -14,6 +14,7 @@ export const API = {
   authToken: `${BASE_URL}/generatetoken`,
   register: `${BASE_URL}/registration`,
   login: `${BASE_URL}/loginuser`,
+  userInfoById: `${BASE_URL}/getuser`,
 //   forgotPassword: `${BASE_URL}/forgotPassword`,
 //   resetPassword: `${BASE_URL}/resetpassword`,
 
