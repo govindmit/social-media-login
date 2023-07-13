@@ -89,25 +89,25 @@ export default function LoginForm() {
 
   const authHandler = async (err, data) => {
     console.log("error", err, "data",data);
-    try {
-      const { oauth_token, oauth_token_secret } = data;
-      const data = await axios.get(
-        'https://api.twitter.com/1.1/account/verify_credentials.json',
-        {
-          headers: {
-            Authorization: `Bearer ${oauth_token}`,
-            oauth_token,
-            oauth_token_secret,
-          },
-        }
-      );
-      const { name, email } = data.data;
-      setUser({ name, email });
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   const { oauth_token, oauth_token_secret } = data;
+    //   const data = await axios.get(
+    //     'https://api.twitter.com/1.1/account/verify_credentials.json',
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${oauth_token}`,
+    //         oauth_token,
+    //         oauth_token_secret,
+    //       },
+    //     }
+    //   );
+    //   const { name, email } = data.data;
+    //   setUser({ name, email });
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
-console.log("twitter user", user)
+// console.log("twitter user", user)
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
