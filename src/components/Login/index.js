@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
+import axios from 'axios';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useGoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +8,11 @@ import { userLoginValidations } from "./validation";
 import { HandleLogin, HandleLoginByGoogle, HandleRegister } from "../APIs/Auth/auth";
 import { ToastContainer } from "react-toastify";
 import TwitterLogin from "react-twitter-login";
-import { GoogleLogin } from '@react-oauth/google';
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const {
     register,
@@ -85,10 +86,28 @@ export default function LoginForm() {
   const registration = () => {
     navigate("/");
   }
-  const authHandler = (err, data) => {
-    console.log(err, data);
-  };
 
+  const authHandler = async (err, data) => {
+    console.log("error", err, "data",data);
+    try {
+      const { oauth_token, oauth_token_secret } = data;
+      const data = await axios.get(
+        'https://api.twitter.com/1.1/account/verify_credentials.json',
+        {
+          headers: {
+            Authorization: `Bearer ${oauth_token}`,
+            oauth_token,
+            oauth_token_secret,
+          },
+        }
+      );
+      const { name, email } = data.data;
+      setUser({ name, email });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+console.log("twitter user", user)
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -160,7 +179,7 @@ export default function LoginForm() {
           <div className="mt-10 text-center text-sm text-gray-500">
             <button className="rounded-full py-2 px-4 border-solid border-4 border-light-blue-500" onClick={() => googleLogin()}>
               <img
-                className="m-2 inline-block h-4 w-4  rounded-full ring-2 ring-white "
+                className="m-3 inline-block h-4 w-4  rounded-full ring-2 ring-white "
                 src="/images/google.svg"
               />Continue with google
             </button>
@@ -169,8 +188,8 @@ export default function LoginForm() {
           <div className="mt-10 ml-20 ">
             <TwitterLogin
               authCallback={authHandler}
-              consumerKey={'piXS6irnP0nDjIPwrXgTxET5Y'}
-              consumerSecret={'URDpYUsWG5Lnrrv8RdrKiw0y92DV1mH7wmCMDKhRGzJHPjuXcl'}
+              consumerKey={'df2jzuvooRdjoh0MqEZNr9yXc'}
+              consumerSecret={'XgvsJ2QQNMNid8bMv5dsq54ebESNzyxlwepmEmR0aArlPMJfIn'}
               requestTokenUrl={'http://localhost:4000/api/v1/auth/twitter/reverse'}
             />
           </div>

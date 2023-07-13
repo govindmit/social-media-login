@@ -4,7 +4,6 @@ import { Route, Routes, } from "react-router-dom";
 import RegisterForm from './components/Register';
 import LoginForm from './components/Login';
 import Profile from './components/Profile';
-import { useNavigate } from 'react-router-dom';
 import { GenerateToken } from './components/APIs/Auth/auth';
 export default function App() {
 
